@@ -1,10 +1,18 @@
-import React from "react"
+import "@/css/tailwind.css";
+import type { AppProps } from "next/app";
+import Head from "next/head";
 
-import { AppProps } from "next/app"
-import "../styles/tailwind.scss"
+import LayoutWrapper from "@/components/LayoutWrapper";
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
-  return <Component {...pageProps} />
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Head>
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+      </Head>
+      <LayoutWrapper>
+        <Component {...pageProps} />
+      </LayoutWrapper>
+    </>
+  );
 }
-
-export default MyApp
