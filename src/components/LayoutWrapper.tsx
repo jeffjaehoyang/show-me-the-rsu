@@ -1,10 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+
 // import Logo from "@/data/logo.svg";
-import Link from "./Link";
-import SectionContainer from "./SectionContainer";
-import Footer from "./Footer";
-import MobileNav from "./MobileNav";
-import NavLink from "./NavLink";
+import Footer from './Footer';
+import Link from './Link';
+import SectionContainer from './SectionContainer';
 
 interface Props {
   children: ReactNode;
@@ -13,20 +12,20 @@ interface Props {
 const LayoutWrapper = ({ children }: Props) => {
   return (
     <SectionContainer>
-      <div className="flex h-screen flex-col justify-between">
+      <div className="flex flex-col justify-between h-screen">
         <header className="flex items-center justify-between pt-5 pb-10">
           <div>
             <Link
               href="/"
-              aria-label={"Show Me The RSU"}
-              style={{ WebkitTapHighlightColor: "transparent" }}
+              aria-label={'rsu.watch'}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               <div className="flex items-center justify-between">
                 {/* <div className="mr-3"> */}
                 {/*   <Logo /> */}
                 {/* </div> */}
-                <div className="text-md hidden font-extrabold sm:block">
-                  show me the rsu
+                <div className="hidden font-extrabold text-md sm:block">
+                  rsu.watch
                 </div>
               </div>
             </Link>

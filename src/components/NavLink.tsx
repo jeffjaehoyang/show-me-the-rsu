@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
-import Link from "next/link";
 import { AnchorHTMLAttributes, DetailedHTMLProps } from "react";
-import { useRouter } from "next/router";
+
 import cn from "classnames";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const NavLink = ({
   href,

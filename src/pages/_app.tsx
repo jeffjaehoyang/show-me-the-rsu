@@ -1,18 +1,20 @@
-import "@/css/tailwind.css";
-import type { AppProps } from "next/app";
-import Head from "next/head";
+import '@/css/tailwind.css';
 
-import LayoutWrapper from "@/components/LayoutWrapper";
+import Head from 'next/head';
+import StockDataProvider from 'src/providers/StockDataProvider';
 
+import LayoutWrapper from '@/components/LayoutWrapper';
+
+import type { AppProps } from 'next/app';
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <StockDataProvider>
       <Head>
         <meta content="width=device-width, initial-scale=1" name="viewport" />
       </Head>
       <LayoutWrapper>
         <Component {...pageProps} />
       </LayoutWrapper>
-    </>
+    </StockDataProvider>
   );
 }
