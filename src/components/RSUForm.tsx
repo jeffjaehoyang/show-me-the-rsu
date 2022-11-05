@@ -1,66 +1,93 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { StockDataContext } from 'src/providers/StockDataProvider';
+import { Triangle } from 'react-loader-spinner';
+import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 
+import { formButtonStyle, formErrorTextStyle, formInputStyle, formLabelStyle } from '@/css/styles';
 import { Grant, GrantSchedule, GrantType } from '@/lib/types';
 
-const labelStyle = 'block text-sm font-medium text-gray-700';
-const inputStyle =
-  'block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50';
-const buttonStyle =
-  'block w-full p-3 mt-2 text-gray-700 bg-indigo-100 rounded-md focus:ring-indigo-200 focus:ring-opacity-50';
-
 const RSUForm = () => {
-  const { stockData, setStockData } = useContext(StockDataContext);
+  const { stockData, setStockData, setShouldShowForm } =
+    useContext(GlobalStateContext);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Grant>();
   const onSubmit: SubmitHandler<Grant> = (data, e) => {
-    setStockData(data);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setShouldShowForm(false);
+      if (stockData === null) {
+        setStockData([data]);
+      } else {
+        setStockData([...stockData, data]);
+      }
+    }, 1500);
   };
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="w-full max-w-lg mx-auto mt-8">
         <div className="grid grid-cols-1 gap-6">
           <label className="block">
-            <span className={labelStyle}>Company Ticker</span>
+            <span className={formLabelStyle}>Company Ticker</span>
             <input
               type="text"
-              className={inputStyle}
-              {...register('companyTicker')}
+              className={formInputStyle}
+              {...register('companyTicker', {
+                required: 'Company ticker is required',
+              })}
             />
+            {errors.companyTicker && (
+              <span className={formErrorTextStyle}>
+                {errors.companyTicker.message}
+              </span>
+            )}
           </label>
           <label className="block">
-            <span className={labelStyle}>Strike Price</span>
+            <span className={formLabelStyle}>Strike Price</span>
             <input
               type="number"
-              className={inputStyle}
-              {...register('strikePrice')}
+              className={formInputStyle}
+              {...register('strikePrice', {
+                required: 'Strike price is required',
+              })}
             />
+            {errors.strikePrice && (
+              <span className={formErrorTextStyle}>
+                {errors.strikePrice.message}
+              </span>
+            )}
           </label>
           <label className="block">
-            <span className={labelStyle}>Number of Units Awarded</span>
+            <span className={formLabelStyle}>Number of Units Awarded</span>
             <input
               type="number"
-              className={inputStyle}
-              {...register('numUnits')}
+              className={formInputStyle}
+              {...register('numUnits', {
+                required: 'Number of units awarded is required',
+              })}
             />
+            {errors.numUnits && (
+              <span className={formErrorTextStyle}>
+                {errors.numUnits.message}
+              </span>
+            )}
           </label>
           <label className="block">
-            <span className={labelStyle}>Grant Type</span>
-            <select className={inputStyle} {...register('grantType')}>
+            <span className={formLabelStyle}>Grant Type</span>
+            <select className={formInputStyle} {...register('grantType')}>
               <option>{GrantType.INITIAL_GRANT}</option>
               <option>{GrantType.REFRESHER}</option>
               <option>{GrantType.ADDITIONAL_EQUITY}</option>
             </select>
           </label>
           <label className="block">
-            <span className={labelStyle}>Grant Schedule</span>
-            <select className={inputStyle} {...register('grantSchedule')}>
+            <span className={formLabelStyle}>Grant Schedule</span>
+            <select className={formInputStyle} {...register('grantSchedule')}>
               <option>{GrantSchedule.MONTHLY}</option>
               <option>{GrantSchedule.QUARTERLY}</option>
               <option>{GrantSchedule.SEMI_ANNUAL}</option>
@@ -68,24 +95,34 @@ const RSUForm = () => {
             </select>
           </label>
           <label className="block">
-            <span className={labelStyle}>
+            <span className={formLabelStyle}>
               When was (or is) your first RSU vest date?
             </span>
             <input
               type="date"
-              className={inputStyle}
+              className={formInputStyle}
               {...register('startDate')}
             />
           </label>
           <label className="block">
-            <span className={labelStyle}>Stock Vest Duration (yrs)</span>
+            <span className={formLabelStyle}>Stock Vest Duration (yrs)</span>
             <input
               type="number"
-              className={inputStyle}
+              className={formInputStyle}
               {...register('grantDuration')}
             />
           </label>
-          <input className={buttonStyle} type="submit" />
+          <button
+            className={formButtonStyle}
+            style={{ minHeight: 45, maxHeight: 45 }}
+            type="submit"
+          >
+            {isLoading ? (
+              <Triangle height="25" width="25" color="white" />
+            ) : (
+              'Submit'
+            )}
+          </button>
         </div>
       </div>
     </form>

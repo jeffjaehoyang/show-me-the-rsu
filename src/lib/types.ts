@@ -32,4 +32,5 @@ export enum StockStatus {
 export type StockPriceResponse = {
   price: string;
   domain: string;
+  displayName: string;
 };

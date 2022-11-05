@@ -12,7 +12,7 @@ interface Props {
 const LayoutWrapper = ({ children }: Props) => {
   return (
     <SectionContainer>
-      <div className="flex flex-col justify-between h-screen">
+      <div className="flex flex-col justify-between h-screen text-gray-700">
         <header className="flex items-center justify-between pt-5 pb-10">
           <div>
             <Link
@@ -24,7 +24,7 @@ const LayoutWrapper = ({ children }: Props) => {
                 {/* <div className="mr-3"> */}
                 {/*   <Logo /> */}
                 {/* </div> */}
-                <div className="hidden font-extrabold text-md sm:block">
+                <div className="font-extrabold text-gray-900 text-md">
                   rsu.watch
                 </div>
               </div>

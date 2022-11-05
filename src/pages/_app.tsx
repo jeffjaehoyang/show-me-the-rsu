@@ -1,7 +1,7 @@
 import '@/css/tailwind.css';
 
 import Head from 'next/head';
-import StockDataProvider from 'src/providers/StockDataProvider';
+import StockDataProvider from 'src/providers/GlobalStateProvider';
 
 import LayoutWrapper from '@/components/LayoutWrapper';
 
