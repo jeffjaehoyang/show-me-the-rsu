@@ -1,12 +1,13 @@
 import 'swiper/css';
 import 'swiper/css/bundle';
-import 'swiper/css/effect-cards';
+import 'swiper/css/effect-cube';
+import 'swiper/css/pagination';
 
 import React, { useContext } from 'react';
-import { BallTriangle, InfinitySpin, ThreeDots } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 import { calculatePercentageDifference } from 'src/utils';
-import { EffectCards } from 'swiper';
+import { EffectCube, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useSWR from 'swr';
 
@@ -49,9 +50,14 @@ const RSUDetail = () => {
         </div>
 
         <Swiper
-          effect={'cards'}
+          effect={'cube'}
           grabCursor={true}
-          modules={[EffectCards]}
+          cubeEffect={{
+            shadow: false,
+            slideShadows: false,
+          }}
+          pagination={true}
+          modules={[EffectCube, Pagination]}
           className="mySwiper"
         >
           {stockData.map((grant: Grant, idx: number) => {
