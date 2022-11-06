@@ -58,6 +58,7 @@ const RSUDetail = () => {
           }}
           pagination={true}
           modules={[EffectCube, Pagination]}
+          loop={true}
           className="mySwiper"
         >
           {stockData.map((grant: Grant, idx: number) => {
