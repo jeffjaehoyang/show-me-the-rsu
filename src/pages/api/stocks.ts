@@ -36,9 +36,15 @@ export default async function handler(
         price: stockData?.regularMarketPrice.toFixed(2),
         domain: domain.toString(),
         displayName: stockData?.displayName,
+        errorMessage: null,
       });
     } catch (e) {
-      console.log(e);
+      return res.status(500).json({
+        price: null,
+        domain: null,
+        displayName: null,
+        errorMessage: e.message,
+      });
     }
   }
 }

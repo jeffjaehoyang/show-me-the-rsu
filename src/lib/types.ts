@@ -1,5 +1,6 @@
 /**** Core Data Types & Enums ****/
 export type Grant = {
+  id: number;
   grantType: GrantType;
   strikePrice: number;
   grantSchedule: GrantSchedule;
@@ -33,4 +34,5 @@ export type StockPriceResponse = {
   price: string;
   domain: string;
   displayName: string;
+  errorMessage: string;
 };

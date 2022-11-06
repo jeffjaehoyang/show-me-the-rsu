@@ -1,12 +1,7 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { useContext } from 'react';
+import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 
-import {
-    grantCardBackgroundColorDown, grantCardBackgroundColorUp, grantCardCompanyInfoWrapper,
-    grantCardCompanyLogoStyle, grantCardCompanyNameWrapper, grantCardContainer,
-    grantCardDeleteButton, grantCardLabelStyle, grantCardStockStatus, grantCardTextColorDown,
-    grantCardTextColorUp
-} from '@/css/styles';
 import { GrantType, StockStatus } from '@/lib/types';
 
 import {
@@ -14,7 +9,31 @@ import {
     StockUpArrowIcon, VerifiedIcon
 } from './icons';
 
+// GrantCard Styles
+export const grantCardContainer =
+  'p-8 border border-gray-100 rounded-lg shadow-md bg-gray-50';
+export const grantCardDeleteButton =
+  'inline-block hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg text-sm p-1.5';
+export const grantCardBackgroundColorUp = 'bg-green-100';
+export const grantCardBackgroundColorDown = 'bg-red-100';
+export const grantCardTextColorUp = 'text-green-700';
+export const grantCardTextColorDown = 'text-red-700';
+export const grantCardLabelStyle =
+  'ml-3 flex flex-row items-center text-3xl font-medium';
+export const grantCardCompanyLogoStyle =
+  'object-contain w-24 h-24 p-1 mb-3 bg-white rounded-full';
+export const grantCardCompanyInfoWrapper =
+  'flex flex-col items-center justify-center';
+export const grantCardCompanyNameWrapper =
+  'flex flex-row items-center mb-1 text-xl font-medium';
+export const grantCardStockStatus =
+  'flex flex-row items-center text-xs font-semibold mr-2 px-2.5 py-0.5 rounded ml-3';
+export const grantCardGrantInfoWrapper =
+  'flex flex-col max-w-sm p-4 mx-auto mt-4 text-xs rounded-md bg-indigo-50';
+
 interface IGrantCardProps {
+  idx: number;
+  id: number;
   grantType: GrantType;
   companyTicker: string;
   logoURI: string;
@@ -27,7 +46,9 @@ interface IGrantCardProps {
   };
 }
 
-const GrandCard: React.FunctionComponent<IGrantCardProps> = ({
+const GrantCard: React.FunctionComponent<IGrantCardProps> = ({
+  idx,
+  id,
   grantType,
   companyTicker,
   logoURI,
@@ -36,10 +57,26 @@ const GrandCard: React.FunctionComponent<IGrantCardProps> = ({
   nextVestDollarValue,
   percentageDifference,
 }) => {
+  const { stockData, setStockData, setCurrentPrice, setShouldShowForm } =
+    useContext(GlobalStateContext);
+
+  const onDelete = () => {
+    setStockData(stockData.filter((data) => data.id !== id));
+  };
+
   return (
     <div className={grantCardContainer}>
+      <div className="absolute top-4 left-4">
+        <div className="flex items-center justify-center object-contain w-5 h-5 p-1 mb-3 text-xs text-white bg-white bg-red-500 rounded-full">
+          {idx + 1}
+        </div>
+      </div>
       <div className="absolute top-4 right-4">
-        <button className={grantCardDeleteButton} type="button">
+        <button
+          className={grantCardDeleteButton}
+          type="button"
+          onClick={onDelete}
+        >
           <DeleteIcon />
         </button>
       </div>
@@ -80,7 +117,7 @@ const GrandCard: React.FunctionComponent<IGrantCardProps> = ({
             </span>
           </div>
         </div>
-        <div className={grantCardCompanyInfoWrapper}>
+        <div className={grantCardGrantInfoWrapper}>
           <div className="flex flex-row items-center">
             <InfoCircleIcon />
             <span>{grantType}</span>
@@ -112,4 +149,4 @@ const GrandCard: React.FunctionComponent<IGrantCardProps> = ({
   );
 };
 
-export default GrandCard;
+export default GrantCard;

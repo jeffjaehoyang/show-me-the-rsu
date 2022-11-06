@@ -1,14 +1,26 @@
 import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Triangle } from 'react-loader-spinner';
+import { ThreeDots, Triangle } from 'react-loader-spinner';
 import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 
-import { formButtonStyle, formErrorTextStyle, formInputStyle, formLabelStyle } from '@/css/styles';
 import { Grant, GrantSchedule, GrantType } from '@/lib/types';
 
+export const formLabelStyle = 'block text-sm font-medium';
+export const formInputStyle =
+  'block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-slate-500 focus:ring focus:ring-slate-200 focus:ring-opacity-50';
+export const formButtonStyle =
+  'block flex items-center justify-center w-full p-3 mt-2 text-white bg-slate-800 rounded-md focus:ring-indigo-200 focus:ring-opacity-50';
+export const formErrorTextStyle = 'text-xs text-red-500';
+
 const RSUForm = () => {
-  const { stockData, setStockData, setShouldShowForm } =
-    useContext(GlobalStateContext);
+  const {
+    stockData,
+    setStockData,
+    setShouldShowForm,
+    nextId,
+    setNextId,
+    currentCompany,
+  } = useContext(GlobalStateContext);
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -17,14 +29,16 @@ const RSUForm = () => {
   } = useForm<Grant>();
   const onSubmit: SubmitHandler<Grant> = (data, e) => {
     setIsLoading(true);
+    data.id = nextId;
+    setNextId((data.id += 1));
+    if (stockData === null) {
+      setStockData([data]);
+    } else {
+      setStockData([...stockData, data]);
+    }
     setTimeout(() => {
       setIsLoading(false);
       setShouldShowForm(false);
-      if (stockData === null) {
-        setStockData([data]);
-      } else {
-        setStockData([...stockData, data]);
-      }
     }, 1500);
   };
 
@@ -40,6 +54,8 @@ const RSUForm = () => {
               {...register('companyTicker', {
                 required: 'Company ticker is required',
               })}
+              placeholder={'AAPL'}
+              defaultValue={currentCompany ?? null}
             />
             {errors.companyTicker && (
               <span className={formErrorTextStyle}>
@@ -88,10 +104,7 @@ const RSUForm = () => {
           <label className="block">
             <span className={formLabelStyle}>Grant Schedule</span>
             <select className={formInputStyle} {...register('grantSchedule')}>
-              <option>{GrantSchedule.MONTHLY}</option>
               <option>{GrantSchedule.QUARTERLY}</option>
-              <option>{GrantSchedule.SEMI_ANNUAL}</option>
-              <option>{GrantSchedule.ANNUAL}</option>
             </select>
           </label>
           <label className="block">
@@ -118,7 +131,13 @@ const RSUForm = () => {
             type="submit"
           >
             {isLoading ? (
-              <Triangle height="25" width="25" color="white" />
+              <ThreeDots
+                height="25"
+                width="25"
+                radius="7"
+                ariaLabel="three-dots-loading"
+                color="white"
+              />
             ) : (
               'Submit'
             )}
