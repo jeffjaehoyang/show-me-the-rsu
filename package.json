@@ -14,10 +14,12 @@
     "test-all": "yarn lint && yarn type-check && yarn test"
   },
   "dependencies": {
+    "chart.js": "^3.9.1",
     "classnames": "^2.3.2",
     "memory-cache": "^0.2.0",
     "next": "12.1.1",
     "react": "^18.0.0",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.39.1",
     "react-loader-spinner": "^5.3.4",

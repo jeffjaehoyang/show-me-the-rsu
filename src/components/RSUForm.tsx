@@ -1,6 +1,7 @@
+import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ThreeDots, Triangle } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 
 import { Grant, GrantSchedule, GrantType } from '@/lib/types';
@@ -16,10 +17,10 @@ const RSUForm = () => {
   const {
     stockData,
     setStockData,
-    setShouldShowForm,
     nextId,
     setNextId,
     currentCompany,
+    setCurrentCompany,
   } = useContext(GlobalStateContext);
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -27,18 +28,25 @@ const RSUForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Grant>();
-  const onSubmit: SubmitHandler<Grant> = (data, e) => {
+  const router = useRouter();
+  const onSubmit: SubmitHandler<Grant> = (data, _) => {
     setIsLoading(true);
     data.id = nextId;
     setNextId((data.id += 1));
+    setCurrentCompany(data.companyTicker);
     if (stockData === null) {
       setStockData([data]);
     } else {
       setStockData([...stockData, data]);
     }
+    router.push({
+      pathname: '/detail',
+      query: {
+        companyTicker: data.companyTicker,
+      },
+    });
     setTimeout(() => {
       setIsLoading(false);
-      setShouldShowForm(false);
     }, 1500);
   };
 
@@ -114,17 +122,22 @@ const RSUForm = () => {
             <input
               type="date"
               className={formInputStyle}
-              {...register('startDate')}
+              {...register('startDate', { required: 'Start date is required' })}
             />
+            {errors.startDate && (
+              <span className={formErrorTextStyle}>
+                {errors.startDate.message}
+              </span>
+            )}
           </label>
-          <label className="block">
+          {/* <label className="block">
             <span className={formLabelStyle}>Stock Vest Duration (yrs)</span>
             <input
               type="number"
               className={formInputStyle}
               {...register('grantDuration')}
             />
-          </label>
+          </label> */}
           <button
             className={formButtonStyle}
             style={{ minHeight: 45, maxHeight: 45 }}

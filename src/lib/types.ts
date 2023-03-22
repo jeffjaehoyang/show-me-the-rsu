@@ -1,3 +1,5 @@
+import { HistoricalResult } from 'yahoo-finance2/dist/esm/src/modules/historical';
+
 /**** Core Data Types & Enums ****/
 export type Grant = {
   id: number;
@@ -34,5 +36,20 @@ export type StockPriceResponse = {
   price: string;
   domain: string;
   displayName: string;
-  errorMessage: string;
+  errorMessage: string | null;
+};
+
+export type HistoricalStockPriceResponse = {
+  data: {
+    [key: number]: {
+      history: HistoricalResult;
+      current: {
+        currentPrice: number;
+        displayName: string;
+        companyTicker: string;
+      };
+    };
+  };
+  domain: string;
+  errorMessage: string | null;
 };

@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { GlobalStateContext } from 'src/providers/GlobalStateProvider';
 
@@ -57,11 +58,15 @@ const GrantCard: React.FunctionComponent<IGrantCardProps> = ({
   nextVestDollarValue,
   percentageDifference,
 }) => {
-  const { stockData, setStockData, setCurrentPrice, setShouldShowForm } =
-    useContext(GlobalStateContext);
+  const { stockData, setStockData } = useContext(GlobalStateContext);
+  const router = useRouter();
 
   const onDelete = () => {
-    setStockData(stockData.filter((data) => data.id !== id));
+    const newStockData = stockData.filter((data) => data.id !== id);
+    if (newStockData.length === 0) {
+      router.push('/');
+    }
+    setStockData(newStockData);
   };
 
   return (
@@ -113,7 +118,7 @@ const GrantCard: React.FunctionComponent<IGrantCardProps> = ({
                 <StockDownArrowIcon />
               )}
               {percentageDifference.status.toUpperCase()}{' '}
-              {percentageDifference.difference}%
+              {Math.abs(parseFloat(percentageDifference.difference))}%
             </span>
           </div>
         </div>
